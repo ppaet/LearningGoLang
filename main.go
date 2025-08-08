@@ -6,9 +6,67 @@ import (
 )
 
 func main() {
-	fruits := []int{0, 0, 1, 1}
-	totalFruit(fruits)
+	nums := []int{2, 2, 1, 1, 1, 2, 2}
+	fmt.Println("多数元素:", majorityElement(nums))
 	os.Exit(0)
+}
+
+func majorityElement(nums []int) int {
+	win := 0
+	count := 0
+	for _, n := range nums {
+		if count == 0 {
+			win = n
+			count = 1
+		} else if win == n {
+			count++
+		} else {
+			count--
+		}
+	}
+	return win
+}
+
+func rob(nums []int) int {
+	l := len(nums)
+	n1, n2, n := 0, 0, 0
+	n = nums[0]
+	if l > 1 {
+		n = max(nums[0], nums[1])
+	}
+	if l > 2 {
+		n2 = nums[0]
+		n1 = n
+		for i := 2; i < l; i++ {
+			n = max(n1, n2+nums[i])
+			n2 = n1
+			n1 = n
+		}
+	}
+	return n
+}
+
+type Node struct {
+	Value int
+	Left  *Node
+	Right *Node
+}
+
+func numOfUnplacedFruits(fruits []int, baskets []int) int {
+	l := len(fruits)
+	fruitsType := make([]bool, l)
+	count := l
+	for i := 0; i < l; i++ {
+		for j := 0; j < l; j++ {
+			if fruitsType[j] == false && baskets[j] >= fruits[i] {
+				fruitsType[j] = true
+				count--
+				break
+			}
+		}
+	}
+
+	return count
 }
 
 func getRow(rowIndex int) []int {
